@@ -1,0 +1,105 @@
+
+import {useState} from 'react';
+import './App.css'
+
+function App() {
+  const[ color, setColor] = useState("blue");
+  let data = {
+    title: "My React App",
+    footerText: "footer text",
+    author: {
+      name: "John Doe",
+      phone: "800-555-1212",
+      email: "jdoe@gmail.com"
+    },
+    books: [
+      {isbn:'123', title:'The Time Machine', price:5.95 },
+      {isbn:'456', title:'War of the Worlds', price:6.95 },
+      {isbn:'789', title:'The Invisible Man', price:4.95 }
+    ]    
+  }
+
+  // let handleChange = function(event){
+  //   setColor(event.currentTarget.value);
+  // }
+
+  return (
+    <div className={'boxed'} >
+      <Header {...data} />
+      <Body setColor={setColor} color={color} {...data} />
+      <Footer {...data} />
+    </div>
+  );
+}
+
+const divStyle = {
+  backgroundColor: 'lightgrey',
+  margin: '0px',
+  padding: '5px', 
+  textAlign: 'center',
+};
+
+// const title = "My React App"
+// var footerText = "footer text"
+// var author = {
+//   name: "John Doe",
+//   phone: "800-555-1212",
+//   email: "jdoe@gmail.com"
+// }
+
+function Header(props){
+  return <h3 style={divStyle}>{props.title}</h3>;
+}
+
+function BookList(props){
+  const[selectedIndex, setSelectedIndex] = useState(0); 
+  let onClick = function(event, index){
+    setSelectedIndex(index);
+  }
+  return (
+    <ul>
+      {props.books.map(
+        (book, index)=>{return (
+            <li key={index}
+                className={index==selectedIndex?"selected":""} 
+                onClick = {(e)=>onClick(e, index)} > 
+            {book.title}
+            </li>
+          )}
+      )}
+    </ul>
+  );
+}
+
+function Body(props){
+  let handleChange = function(event){
+    props.setColor(event.currentTarget.value);
+  }
+  let onResetClick = function(){
+    props.setColor("green");
+  }
+  return <div><p>Author: {props.author.name}</p>
+  <BookList books={props.books} />
+  <p>Enter your favorite color:</p>
+  <input type='text' name='color'
+         value={props.color} 
+         onChange = {handleChange} />
+  <button onClick={onResetClick}>Reset</button>
+  </div>;
+}
+
+function Footer(props){
+  return <div><h4 style={divStyle}>{props.footerText}</h4></div>;
+}
+
+function FragTest(props){
+  return <ul><ColorList /></ul>
+}
+
+function ColorList(props){
+  return <><li>Red</li>
+  <li>Yellow</li>
+  <li>Blue</li></>
+}
+
+export default App
